@@ -1,0 +1,14 @@
+syntax = 'proto3';
+
+message BookRequest{
+    int32 workplace_id = 1;
+}
+
+message BookResponse{
+    bool success = 1;
+    string message = 2;
+}
+
+service CoworkingService{
+    rpc BookWorkplace (BookRequest) returns (BookResponse);
+}
