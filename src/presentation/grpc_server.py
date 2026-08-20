@@ -4,11 +4,13 @@ from src.application.usecases import BookWorkplaceUseCase
 from src.infrastructure.repositories import InMemoryWorkplaceRepository
 
 class GrpcCoworkingHandler(coworking_pb2_grpc.CoworkingServiceServicer):
+    def __init__(self, repo):
+        self.repo = repo
+
     def BookWorkplace(self, request, context):
         try:
             workplace_id = request.workplace_id
-            repo = InMemoryWorkplaceRepository()
-            use_case = BookWorkplaceUseCase(repo=repo)
+            use_case = BookWorkplaceUseCase(repo=self.repo)
             use_case.execute(workplace_id=workplace_id)
             return coworking_pb2.BookResponse(
                 success=True,

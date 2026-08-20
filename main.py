@@ -1,11 +1,23 @@
+import asyncio
+import grpc
+
 from src.domain.entities import Workplace
-from src.application.usecases import BookWorkplaceUseCase
 from src.infrastructure.repositories import InMemoryWorkplaceRepository
+from src.presentation.grpc_server import GrpcCoworkingHandler
+from protos.coworking_pb2_grpc import add_CoworkingServiceServicer_to_server
 
+async def serve():
+    repo = InMemoryWorkplaceRepository()
+    repo.save(Workplace(
+        id=1,
+        name="Стол у окна"
+    ))
+    server = grpc.aio.server()
+    add_CoworkingServiceServicer_to_server(GrpcCoworkingHandler(repo), server)
+    server.add_insecure_port('[::]:50051')
+    await server.start()
+    await server.wait_for_termination()
 
-my_workplace = Workplace(id=1, name="Стол у окна")
-repo = InMemoryWorkplaceRepository()
-repo.save(my_workplace)
-use_case = BookWorkplaceUseCase(repo=repo)
-final_result = use_case.execute(workplace_id=1)
-print(final_result)
+if __name__ == '__main__':
+    asyncio.run(serve())
+
