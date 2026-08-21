@@ -7,13 +7,15 @@ class InMemoryWorkplaceRepository(AbstractWorkplaceRepository):
     def __init__(self):
         self._data = {}
 
-    def save(self, workplace: Workplace)-> Workplace:
+    async def save(self, workplace: Workplace) -> Workplace:
         self._data[workplace.id] = workplace
         return workplace
 
-    def get_by_id(self, workplace_id: int) -> Workplace:
+    async def get_by_id(self, workplace_id: int) -> Workplace:
         if workplace_id not in self._data:
-            raise KeyError(f'Workplace with id {workplace_id} does not exist')
+            raise KeyError(
+                f'Workplace with id {workplace_id} does not exist'
+            )
         return self._data[workplace_id]
 
 

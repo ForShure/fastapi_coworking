@@ -1,9 +1,25 @@
+# Python
 .venv/
-.idea/
 __pycache__/
-*.db
-*.sql
+*.py[cod]
+
+# Environment
 .env
-media/
+.env.*
+
+# IDE
+.idea/
+.vscode/
+
+# Database / local data
+*.db
+postgres_data/
+
+# Logs
 *.log
 
+# Django
+media/
+
+# Node
+node_modules/
