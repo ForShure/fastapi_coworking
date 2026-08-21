@@ -1,10 +1,10 @@
-from sqlalchemy import Column, Integer, String, Boolean
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 class WorkplaceModel(Base):
     __tablename__ = 'workplaces'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    is_available = Column(Boolean, default=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(default='')
+    is_available: Mapped[bool] = mapped_column(default=True)

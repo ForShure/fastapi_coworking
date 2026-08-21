@@ -1,15 +1,14 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-POSTGRES_DATABASE_URL = "postgresql://postgres:postgres@localhost:5433/coworking_db"
+POSTGRES_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost:5433/coworking_db"
 
-engine = create_engine(POSTGRES_DATABASE_URL)
+engine = create_async_engine(POSTGRES_DATABASE_URL, echo=True)
 
-SessionLocal = sessionmaker(autoflush=False, bind=engine)
+async_session_maker = async_sessionmaker(autoflush=False, bind=engine, expire_on_commit=False)
 
-def get_db():
-    session = SessionLocal()
+async def get_db():
+    session = async_session_maker()
     try:
         yield session
     finally:
-        session.close()
+        await session.close()
